@@ -5,7 +5,7 @@ import cloudsVideo from '../videos/Cloudy.mp4';
 import fewCloudsVideo from '../videos/Few-clouds.mp4';
 import scatteredCloudsVideo from '../videos/Scattered-clouds.mp4';
 import rainVideo from '../videos/Rain.mp4';
-import mistVideo from '../videos/Mist.mp4'; // Asegúrate de tener el video de mist
+import mistVideo from '../videos/Mist.mp4'; 
 
 const WeatherBackground = ({ description, children }) => {
   const [videoSource, setVideoSource] = useState(null);
@@ -21,14 +21,12 @@ const WeatherBackground = ({ description, children }) => {
       case 'scattered clouds':
         setVideoSource(scatteredCloudsVideo);
         break;
-      case 'overcast clouds':
       case 'few clouds':
         setVideoSource(fewCloudsVideo);
         break;
       case 'mist':
         setVideoSource(mistVideo);
         break;
-      case 'rain':
       case 'light rain':
       case 'moderate rain':
       case 'heavy rain':
