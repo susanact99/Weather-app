@@ -8,7 +8,9 @@ body {
   color: white;
   font-size: 1.2rem;
 }
-
+label{
+  display: inline;
+}
 .container {
   font-family: "Roboto", sans-serif;
   font-weight: 400;

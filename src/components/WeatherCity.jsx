@@ -5,6 +5,7 @@ import WeatherBackground from './WeatherBackground';
 export function WeatherCity() {
   const [ciudad, setCiudad] = useState('');
   const [dataClima, setDataClima] = useState(null);
+  const [description, setDescription] = useState('');
   const urlBase = 'https://api.openweathermap.org/data/2.5/weather?';
   const APIKey = 'ab7068f382ef10bb34572ac2ebdcf10e';
   const difKelvin = 273.15;
@@ -13,10 +14,10 @@ export function WeatherCity() {
     setCiudad(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (ciudad.length > 0) {
-      fetchClima();
+      await fetchClima();
     }
   };
 
@@ -25,13 +26,15 @@ export function WeatherCity() {
       const response = await fetch(`${urlBase}q=${ciudad}&APPID=${APIKey}`);
       const data = await response.json();
       setDataClima(data);
+      setDescription(data.weather[0].description); // Asegúrate de que esta línea se ejecuta después de establecer dataClima
+      console.log("Weather data fetched:", data); // Log for debugging
     } catch (error) {
       console.error('Ocurrió el siguiente problema', error);
     }
   };
 
   return (
-    <WeatherBackground description={dataClima?.weather[0]?.description || ''}>
+    <WeatherBackground description={description}>
       <div className="container">
         <h1>Weather app</h1>
         <form className="form" onSubmit={handleSubmit}>

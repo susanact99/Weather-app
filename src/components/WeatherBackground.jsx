@@ -9,6 +9,7 @@ import mistVideo from '../videos/Mist.mp4';
 
 const WeatherBackground = ({ description, children }) => {
   const [videoSource, setVideoSource] = useState(null);
+  const [key, setKey] = useState(0); // Adding a key to force re-render
 
   useEffect(() => {
     switch (description) {
@@ -22,9 +23,11 @@ const WeatherBackground = ({ description, children }) => {
         setVideoSource(scatteredCloudsVideo);
         break;
       case 'few clouds':
+      case 'overcast clouds':
         setVideoSource(fewCloudsVideo);
         break;
       case 'mist':
+      case 'dust':
         setVideoSource(mistVideo);
         break;
       case 'light rain':
@@ -35,12 +38,13 @@ const WeatherBackground = ({ description, children }) => {
       default:
         setVideoSource(null);
     }
+    setKey(prevKey => prevKey + 1); // Increment key to force re-render
   }, [description]);
 
   return (
     <div className="weather-container">
       {videoSource && (
-        <video className="background-video" autoPlay loop muted>
+        <video key={key} className="background-video" autoPlay loop muted>
           <source src={videoSource} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
