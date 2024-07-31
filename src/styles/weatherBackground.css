@@ -2,6 +2,7 @@
 .weather-container {
     position: relative;
     z-index: 1;
+    transition: .3s ease;
   }
   
   .background-video {
@@ -15,5 +16,6 @@
     z-index: -1;
     transform: translate(-50%, -50%);
     object-fit: cover;
+    transition: .5s ease;
   }
   

@@ -5,7 +5,7 @@ import WeatherBackground from './WeatherBackground';
 export function WeatherCity() {
   const [ciudad, setCiudad] = useState('');
   const [dataClima, setDataClima] = useState(null);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState('initial-state');
   const urlBase = 'https://api.openweathermap.org/data/2.5/weather?';
   const APIKey = 'ab7068f382ef10bb34572ac2ebdcf10e';
   const difKelvin = 273.15;
@@ -38,7 +38,7 @@ export function WeatherCity() {
       <div className="container">
         <h1>Weather app</h1>
         <form className="form" onSubmit={handleSubmit}>
-          <label htmlFor="ciudad">City</label>
+          <label htmlFor="ciudad">Enter your City</label>
           <div>
             <input
               type="text"

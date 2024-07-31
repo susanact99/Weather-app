@@ -13,6 +13,7 @@ const WeatherBackground = ({ description, children }) => {
 
   useEffect(() => {
     switch (description) {
+      
       case 'clear sky':
         setVideoSource(clearSkyVideo);
         break;
@@ -22,6 +23,7 @@ const WeatherBackground = ({ description, children }) => {
       case 'scattered clouds':
         setVideoSource(scatteredCloudsVideo);
         break;
+      case 'initial-state':
       case 'few clouds':
       case 'overcast clouds':
         setVideoSource(fewCloudsVideo);

@@ -19,7 +19,8 @@ body {
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   font-style: normal;
-  max-width: 380px;
+  width: 380px;
+  min-height: 500px;
   margin: 5px auto;
   padding: 20px;
   display: flex;
@@ -87,7 +88,7 @@ img {
 }
 
 /* Estilos para móviles */
-@media (max-width: 412px) {
+@media (max-width: 440px) {
   .container {
     width: 98%;
     height: 100vh;
