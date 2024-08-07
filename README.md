@@ -42,11 +42,8 @@ This Weather App allows users to get the current weather information for a speci
 ##Running the App
    To start the development server:
    ```bash
-     npm run dev
-##Building for Production
-   To build the app for production:
-   ```bash
-npm run build
+   npm run dev
+
 
 
 
