@@ -39,7 +39,7 @@ This Weather App allows users to get the current weather information for a speci
 3. Create a .env file at the root of the project and add your OpenWeatherMap API key:
    ```bash
    REACT_APP_WEATHER_API_KEY=your_api_key_here
-##Running the App
+4.Running the App
    To start the development server:
    ```bash
    npm run dev
