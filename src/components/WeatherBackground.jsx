@@ -35,6 +35,7 @@ const WeatherBackground = ({ description, children }) => {
       case 'light rain':
       case 'moderate rain':
       case 'heavy rain':
+      case 'thunderstorm':
         setVideoSource(rainVideo);
         break;
       default:
