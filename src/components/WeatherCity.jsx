@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/weatherStyles.css';
 import WeatherBackground from './WeatherBackground';
 import City from "../images/City.svg";
@@ -8,7 +8,7 @@ export function WeatherCity() {
   const [ciudad, setCiudad] = useState('');
   const [dataClima, setDataClima] = useState(null);
   const [description, setDescription] = useState('initial-state');
-  const [currentTime, setCurrentTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState(Math.floor(Date.now() / 1000));
   const [sunrise, setSunrise] = useState(0);
   const [sunset, setSunset] = useState(0);
   const urlBase = 'https://api.openweathermap.org/data/2.5/weather?';
@@ -33,13 +33,21 @@ export function WeatherCity() {
       const data = await response.json();
       setDataClima(data);
       setDescription(data.weather[0].description);
-      setCurrentTime(Math.floor(Date.now() / 1000));
       setSunrise(Math.floor(data.sys.sunrise));
       setSunset(Math.floor(data.sys.sunset));
+      setCurrentTime(Math.floor(Date.now() / 1000)); // actualizar currentTime cuando se obtiene el clima
     } catch (error) {
       console.error('Ocurrió el siguiente problema', error);
     }
   };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(Math.floor(Date.now() / 1000));
+    }, 1000);
+
+    return () => clearInterval(intervalId); // limpiar intervalo cuando se desmonte el componente
+  }, []);
 
   return (
     <WeatherBackground description={description}>

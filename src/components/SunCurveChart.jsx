@@ -7,25 +7,27 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 const SunCurveChart = ({ sunrise, sunset, currentTime }) => {
   const formatTime = (time) => {
     const date = new Date(time * 1000);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
     return `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
   };
 
-  const createNormalDistribution = (sunrise, sunset) => {
+  const createQuadraticSunPath = (sunrise, sunset) => {
     const data = [];
-    const mean = (sunrise + sunset) / 2;
-    const variance = Math.pow((sunset - sunrise) / 6, 2);
+    const midpoint = (sunrise + sunset) / 2;
+    const maxPeak = 1; // Valor máximo de la curva en el punto medio (puede ajustarse)
+    const a = -maxPeak / Math.pow(sunset - sunrise, 2);
 
     for (let time = sunrise; time <= sunset; time += 3600) {
-      const y = (1 / Math.sqrt(2 * Math.PI * variance)) * Math.exp(-Math.pow(time - mean, 2) / (2 * variance));
-      data.push({ x: formatTime(time), y });
+      const x = time;
+      const y = a * Math.pow(x - midpoint, 2) + maxPeak;
+      data.push({ x: formatTime(time), y, time });
     }
 
     return data;
   };
 
-  const sunData = createNormalDistribution(sunrise, sunset);
+  const sunData = createQuadraticSunPath(sunrise, sunset);
 
   const data = {
     labels: sunData.map((point) => point.x),
@@ -41,17 +43,14 @@ const SunCurveChart = ({ sunrise, sunset, currentTime }) => {
       {
         label: 'Current Time',
         data: sunData.map((point) => {
-          const time = new Date(`1970-01-01T${point.x}:00Z`).getTime() / 1000;
-          if (currentTime >= time && currentTime < time + 3600) {
-            return point.y;
-          }
-          return null;
+          const timeDiff = Math.abs(currentTime - point.time);
+          return timeDiff < 1800 ? point.y : null;  // Tolerancia de 30 minutos
         }),
         fill: false,
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
-        tension: 0.1,
         pointRadius: 5,
+        showLine: false,
       },
     ],
   };
@@ -60,25 +59,25 @@ const SunCurveChart = ({ sunrise, sunset, currentTime }) => {
     plugins: {
       legend: {
         labels: {
-          color: 'white', // Set legend text color to white
+          color: 'white',
         },
       },
     },
     scales: {
       x: {
         ticks: {
-          color: 'white', // Set X-axis tick color to white
+          color: 'white',
         },
         grid: {
-          color: 'rgba(255, 255, 255, 0.2)', // Set X-axis grid color to white with transparency
+          color: 'rgba(255, 255, 255, 0.2)',
         },
       },
       y: {
         ticks: {
-          color: 'white', // Set Y-axis tick color to white
+          display: false, // Ocultar los valores del eje Y
         },
         grid: {
-          color: 'rgba(255, 255, 255, 0.2)', // Set Y-axis grid color to white with transparency
+          display: false, // Ocultar las líneas de la cuadrícula del eje Y
         },
       },
     },

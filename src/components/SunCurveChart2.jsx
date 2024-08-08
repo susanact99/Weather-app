@@ -7,8 +7,8 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 const SunCurveChart = ({ sunrise, sunset, currentTime }) => {
   const formatTime = (time) => {
     const date = new Date(time * 1000);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
     return `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
   };
 
@@ -18,17 +18,12 @@ const SunCurveChart = ({ sunrise, sunset, currentTime }) => {
     const variance = Math.pow((sunset - sunrise) / 6, 2);
 
     for (let time = sunrise; time <= sunset; time += 3600) {
-      const x = time;
-      const y = (1 / Math.sqrt(2 * Math.PI * variance)) * Math.exp(-Math.pow(x - mean, 2) / (2 * variance));
-      data.push({ x: formatTime(x), y });
+      const y = (1 / Math.sqrt(2 * Math.PI * variance)) * Math.exp(-Math.pow(time - mean, 2) / (2 * variance));
+      data.push({ x: formatTime(time), y, time });
     }
 
     return data;
   };
-
-  if (sunrise === null || sunset === null) {
-    return <div>Loading...</div>;
-  }
 
   const sunData = createNormalDistribution(sunrise, sunset);
 
@@ -46,40 +41,50 @@ const SunCurveChart = ({ sunrise, sunset, currentTime }) => {
       {
         label: 'Current Time',
         data: sunData.map((point) => {
-          const time = sunrise + sunData.indexOf(point) * 3600;
-          if (currentTime >= time && currentTime < time + 3600) {
-            const mean = (sunrise + sunset) / 2;
-            const variance = Math.pow((sunset - sunrise) / 6, 2);
-            return (1 / Math.sqrt(2 * Math.PI * variance)) * Math.exp(-Math.pow(time - mean, 2) / (2 * variance));
-          }
-          return null;
+          const timeDiff = Math.abs(currentTime - point.time);
+          return timeDiff < 1800 ? point.y : null;  // Tolerancia de 30 minutos
         }),
         fill: false,
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
-        tension: 0.1,
         pointRadius: 5,
+        showLine: false,
       },
     ],
+  };
+
+  const options = {
+    plugins: {
+      legend: {
+        labels: {
+          color: 'white',
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: 'white',
+        },
+        grid: {
+          color: 'rgba(255, 255, 255, 0.2)',
+        },
+      },
+      y: {
+        ticks: {
+          display: false, // Ocultar los valores del eje Y
+        },
+        grid: {
+          display: false, // Ocultar las líneas de la cuadrícula del eje Y
+        },
+      },
+    },
   };
 
   return (
     <div>
       <h2>Sunrise and Sunset Curve</h2>
-      <Line data={data} />
-      <div>
-        <label>Enter current time (HH:mm): </label>
-        <input
-          type="time"
-          onChange={(e) => {
-            const [hours, minutes] = e.target.value.split(':');
-            const now = new Date();
-            now.setHours(hours);
-            now.setMinutes(minutes);
-            setCurrentTime(Math.floor(now.getTime() / 1000));
-          }}
-        />
-      </div>
+      <Line data={data} options={options} />
     </div>
   );
 };
