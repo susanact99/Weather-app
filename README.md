@@ -29,7 +29,6 @@ This Weather App allows users to get the current weather information for a speci
 ### Installation
 
 1. Clone the repository:
-
    ```bash
    git clone https://github.com/susanact99/Weather-app.git
    cd Weather-app
@@ -39,13 +38,13 @@ This Weather App allows users to get the current weather information for a speci
 3. Create a .env file at the root of the project and add your OpenWeatherMap API key:
    ```bash
    REACT_APP_WEATHER_API_KEY=your_api_key_here
-4.Running the App
+4. Running the App
    To start the development server:
    ```bash
    npm run dev
-
-
-
-
-
-
+###Deploying
+To deploy the app to GitHub Pages:
+ 1. Ensure the homepage field in package.json is set to the correct URL of your GitHub Pages site.
+ 2. Run the deploy script:
+    ```bash
+    npm run deploy
