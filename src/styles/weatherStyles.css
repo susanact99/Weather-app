@@ -24,7 +24,7 @@ body {
 .container {
   min-width: 100%;
   min-height: 100vh;
-  padding: 20px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   background-color: rgba(13, 27, 41, 0.5);
@@ -73,6 +73,7 @@ body {
   display: flex;
   width: 350px;
   justify-content: space-around;
+  
 }
 .other-parameters p:nth-child(2n){
   margin: 0;
